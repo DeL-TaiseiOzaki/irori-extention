@@ -54,7 +54,7 @@ export class LayerTreeProvider implements vscode.TreeDataProvider<Element> {
 	private directoryItem(node: DirectoryNode): vscode.TreeItem {
 		const item = new vscode.TreeItem(node.name, vscode.TreeItemCollapsibleState.Collapsed);
 		item.tooltip = node.path;
-		item.contextValue = 'layeredkb.directory';
+		item.contextValue = 'irori.directory';
 		// resourceUri を与えるとファイルアイコンテーマのフォルダーアイコンが使われる
 		const sample = firstFile(node);
 		if (sample) {
@@ -71,7 +71,7 @@ export class LayerTreeProvider implements vscode.TreeDataProvider<Element> {
 		const uri = this.index.uriOf(node.file);
 		const item = new vscode.TreeItem(node.name, vscode.TreeItemCollapsibleState.None);
 		item.tooltip = uri ? uri.fsPath : node.path;
-		item.contextValue = 'layeredkb.file';
+		item.contextValue = 'irori.file';
 		if (uri) {
 			item.resourceUri = uri;
 			item.command = { command: 'vscode.open', title: 'Open', arguments: [uri] };

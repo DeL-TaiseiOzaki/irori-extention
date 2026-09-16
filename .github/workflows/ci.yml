@@ -20,8 +20,8 @@ jobs:
       - name: Verify package contents
         run: ./scripts/check-vsix-contents.sh
       - name: Package (dry run)
-        run: npx @vscode/vsce package --out layeredkb.vsix
+        run: npx @vscode/vsce package --out irori.vsix
       - uses: actions/upload-artifact@v4
         with:
-          name: layeredkb-vsix
-          path: layeredkb.vsix
+          name: irori-vsix
+          path: irori.vsix

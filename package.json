@@ -1,17 +1,17 @@
 {
-	"name": "layeredkb",
-	"displayName": "LayeredKB",
+	"name": "irori-extention",
+	"displayName": "irori for VS Code",
 	"description": "Personal Knowledge Base のワークスペースを「スキーマ層 / オントロジー層 / ナレッジベース層 / Raw データ層」のパネルに分けて表示する VS Code 拡張機能．",
 	"version": "0.2.0",
 	"license": "MIT",
 	"publisher": "del-taiseiozaki",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/DeL-TaiseiOzaki/LayeredKB-vscode-extention.git"
+		"url": "https://github.com/DeL-TaiseiOzaki/irori-extention.git"
 	},
-	"homepage": "https://github.com/DeL-TaiseiOzaki/LayeredKB-vscode-extention#readme",
+	"homepage": "https://github.com/DeL-TaiseiOzaki/irori-extention#readme",
 	"bugs": {
-		"url": "https://github.com/DeL-TaiseiOzaki/LayeredKB-vscode-extention/issues"
+		"url": "https://github.com/DeL-TaiseiOzaki/irori-extention/issues"
 	},
 	"icon": "images/icon.png",
 	"galleryBanner": {
@@ -41,251 +41,251 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "layeredkb",
-					"title": "LayeredKB",
+					"id": "irori",
+					"title": "irori",
 					"icon": "$(layers)"
 				}
 			]
 		},
 		"views": {
-			"layeredkb": [
+			"irori": [
 				{
-					"id": "layeredkb.slot0",
+					"id": "irori.slot0",
 					"name": "Layer 1",
-					"contextualTitle": "LayeredKB"
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot1",
+					"id": "irori.slot1",
 					"name": "Layer 2",
-					"when": "layeredkb.slot1.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot1.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot2",
+					"id": "irori.slot2",
 					"name": "Layer 3",
-					"when": "layeredkb.slot2.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot2.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot3",
+					"id": "irori.slot3",
 					"name": "Layer 4",
-					"when": "layeredkb.slot3.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot3.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot4",
+					"id": "irori.slot4",
 					"name": "Layer 5",
-					"when": "layeredkb.slot4.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot4.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot5",
+					"id": "irori.slot5",
 					"name": "Layer 6",
-					"when": "layeredkb.slot5.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot5.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot6",
+					"id": "irori.slot6",
 					"name": "Layer 7",
-					"when": "layeredkb.slot6.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot6.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.slot7",
+					"id": "irori.slot7",
 					"name": "Layer 8",
-					"when": "layeredkb.slot7.visible",
-					"contextualTitle": "LayeredKB"
+					"when": "irori.slot7.visible",
+					"contextualTitle": "irori"
 				},
 				{
-					"id": "layeredkb.spike.grid",
+					"id": "irori.spike.grid",
 					"type": "webview",
 					"initialSize": 12,
 					"name": "Grid Prototype (spike)",
-					"when": "config.layeredkb.spike.enableGrid",
-					"contextualTitle": "LayeredKB"
+					"when": "config.irori.spike.enableGrid",
+					"contextualTitle": "irori"
 				}
 			]
 		},
 		"viewsWelcome": [
 			{
-				"view": "layeredkb.slot0",
+				"view": "irori.slot0",
 				"contents": "フォルダーを開くと，ファイルをレイヤーごとに整理して表示します．\n[フォルダーを開く](command:vscode.openFolder)",
 				"when": "workbenchState == empty"
 			},
 			{
-				"view": "layeredkb.slot0",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot0",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot1",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot1",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot2",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot2",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot3",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot3",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot4",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot4",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot5",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot5",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot6",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot6",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			},
 			{
-				"view": "layeredkb.slot7",
-				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:layeredkb.configureLayers)",
+				"view": "irori.slot7",
+				"contents": "このレイヤーに該当するファイルはありません．\n[レイヤー設定を開く](command:irori.configureLayers)",
 				"when": "workbenchState != empty"
 			}
 		],
 		"commands": [
 			{
-				"command": "layeredkb.refresh",
+				"command": "irori.refresh",
 				"title": "Refresh Layers",
-				"category": "LayeredKB",
+				"category": "irori",
 				"icon": "$(refresh)"
 			},
 			{
-				"command": "layeredkb.configureLayers",
+				"command": "irori.configureLayers",
 				"title": "Configure Layers",
-				"category": "LayeredKB",
+				"category": "irori",
 				"icon": "$(gear)"
 			},
 			{
-				"command": "layeredkb.openToSide",
+				"command": "irori.openToSide",
 				"title": "Open to the Side",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.revealInExplorer",
+				"command": "irori.revealInExplorer",
 				"title": "Reveal in Explorer View",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.revealFileInOS",
+				"command": "irori.revealFileInOS",
 				"title": "Reveal in File Explorer",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.copyPath",
+				"command": "irori.copyPath",
 				"title": "Copy Path",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.copyRelativePath",
+				"command": "irori.copyRelativePath",
 				"title": "Copy Relative Path",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.spike.openGrid",
+				"command": "irori.spike.openGrid",
 				"title": "Open Grid Prototype (spike)",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.spike.loadSynthetic",
+				"command": "irori.spike.loadSynthetic",
 				"title": "Load Synthetic Vault into Grid Prototype (spike)",
-				"category": "LayeredKB"
+				"category": "irori"
 			},
 			{
-				"command": "layeredkb.spike.loadWorkspace",
+				"command": "irori.spike.loadWorkspace",
 				"title": "Load Workspace into Grid Prototype (spike)",
-				"category": "LayeredKB"
+				"category": "irori"
 			}
 		],
 		"menus": {
 			"commandPalette": [
 				{
-					"command": "layeredkb.openToSide",
+					"command": "irori.openToSide",
 					"when": "false"
 				},
 				{
-					"command": "layeredkb.revealInExplorer",
+					"command": "irori.revealInExplorer",
 					"when": "false"
 				},
 				{
-					"command": "layeredkb.revealFileInOS",
+					"command": "irori.revealFileInOS",
 					"when": "false"
 				},
 				{
-					"command": "layeredkb.copyPath",
+					"command": "irori.copyPath",
 					"when": "false"
 				},
 				{
-					"command": "layeredkb.copyRelativePath",
+					"command": "irori.copyRelativePath",
 					"when": "false"
 				},
 				{
-					"command": "layeredkb.spike.openGrid",
-					"when": "config.layeredkb.spike.enableGrid"
+					"command": "irori.spike.openGrid",
+					"when": "config.irori.spike.enableGrid"
 				},
 				{
-					"command": "layeredkb.spike.loadSynthetic",
-					"when": "config.layeredkb.spike.enableGrid"
+					"command": "irori.spike.loadSynthetic",
+					"when": "config.irori.spike.enableGrid"
 				},
 				{
-					"command": "layeredkb.spike.loadWorkspace",
-					"when": "config.layeredkb.spike.enableGrid"
+					"command": "irori.spike.loadWorkspace",
+					"when": "config.irori.spike.enableGrid"
 				}
 			],
 			"view/title": [
 				{
-					"command": "layeredkb.refresh",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/",
+					"command": "irori.refresh",
+					"when": "view =~ /^irori\\.slot\\d+$/",
 					"group": "navigation@1"
 				},
 				{
-					"command": "layeredkb.configureLayers",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/",
+					"command": "irori.configureLayers",
+					"when": "view =~ /^irori\\.slot\\d+$/",
 					"group": "navigation@2"
 				}
 			],
 			"view/item/context": [
 				{
-					"command": "layeredkb.openToSide",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/ && viewItem == layeredkb.file",
+					"command": "irori.openToSide",
+					"when": "view =~ /^irori\\.slot\\d+$/ && viewItem == irori.file",
 					"group": "navigation@1"
 				},
 				{
-					"command": "layeredkb.revealInExplorer",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/ && viewItem == layeredkb.file",
+					"command": "irori.revealInExplorer",
+					"when": "view =~ /^irori\\.slot\\d+$/ && viewItem == irori.file",
 					"group": "2_reveal@1"
 				},
 				{
-					"command": "layeredkb.revealFileInOS",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/ && viewItem == layeredkb.file",
+					"command": "irori.revealFileInOS",
+					"when": "view =~ /^irori\\.slot\\d+$/ && viewItem == irori.file",
 					"group": "2_reveal@2"
 				},
 				{
-					"command": "layeredkb.copyPath",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/ && viewItem == layeredkb.file",
+					"command": "irori.copyPath",
+					"when": "view =~ /^irori\\.slot\\d+$/ && viewItem == irori.file",
 					"group": "3_copy@1"
 				},
 				{
-					"command": "layeredkb.copyRelativePath",
-					"when": "view =~ /^layeredkb\\.slot\\d+$/ && viewItem == layeredkb.file",
+					"command": "irori.copyRelativePath",
+					"when": "view =~ /^irori\\.slot\\d+$/ && viewItem == irori.file",
 					"group": "3_copy@2"
 				}
 			]
 		},
 		"configuration": {
-			"title": "LayeredKB",
+			"title": "irori",
 			"properties": {
-				"layeredkb.layers": {
+				"irori.layers": {
 					"type": "array",
 					"markdownDescription": "レイヤーの定義．各レイヤーは独立したパネルとして表示されます（最大 8 個）．上から順に評価され，最初に一致したレイヤーが採用されます．どのレイヤーにも一致しないファイルは「その他」に入ります．パターンは「スコープルート（ワークスペース自身，または `.gitmodules` の submodule）からの相対パス」に対して評価され，スコープルート配下は親のパターンでは分類されません．`contents/` 直下以下はパターン照合を行わず，`contents/` を宣言したレイヤー（既定では Raw データ層）にそのまま入ります．`roots` を指定したレイヤーはワークスペース外のフォルダだけを走査します．",
 					"default": [
@@ -406,7 +406,7 @@
 						}
 					}
 				},
-				"layeredkb.exclude": {
+				"irori.exclude": {
 					"type": "array",
 					"items": {
 						"type": "string"
@@ -419,27 +419,27 @@
 					],
 					"description": "走査から除外する glob パターン（ワークスペースでは `files.exclude` に加えて適用されます）"
 				},
-				"layeredkb.showOtherLayer": {
+				"irori.showOtherLayer": {
 					"type": "boolean",
 					"default": true,
 					"description": "どのレイヤーにも属さないファイルを「その他」パネルとして表示する"
 				},
-				"layeredkb.compactFolders": {
+				"irori.compactFolders": {
 					"type": "boolean",
 					"default": true,
 					"description": "子が 1 つしかないフォルダーを 1 行にまとめて表示する（エクスプローラーのコンパクトフォルダーと同様）"
 				},
-				"layeredkb.decorateExplorer": {
+				"irori.decorateExplorer": {
 					"type": "boolean",
 					"default": true,
 					"description": "標準エクスプローラー上のファイルにレイヤーのバッジと色を付ける"
 				},
-				"layeredkb.spike.enableGrid": {
+				"irori.spike.enableGrid": {
 					"type": "boolean",
 					"default": false,
 					"markdownDescription": "SPIKE (2026-09-08): 検証用のグリッドサイドバー試作を有効にする．既定では無効で，通常の表示には影響しない．"
 				},
-				"layeredkb.followSymlinks": {
+				"irori.followSymlinks": {
 					"type": "boolean",
 					"default": false,
 					"markdownDescription": "レイヤーの `roots` に指定した外部フォルダを走査するとき，中のシンボリックリンクを辿る．Google Drive のマウントをリンクで置いている場合に有効にする．循環参照は検出して打ち切り，深さとエントリ数にも上限を設けるが，リンクの先が巨大なフォルダだと走査に時間がかかる．`roots` に直接指定したフォルダ自体は，この設定に関わらず常に辿られる"

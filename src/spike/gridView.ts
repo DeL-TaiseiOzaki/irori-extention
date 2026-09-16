@@ -1,8 +1,8 @@
 /**
  * SPIKE (2026-09-08) — WebviewView host for the grid sidebar prototype.
  *
- * Throwaway. Registered into the existing `layeredkb` activity-bar container
- * behind the default-off setting `layeredkb.spike.enableGrid`, so nothing
+ * Throwaway. Registered into the existing `irori` activity-bar container
+ * behind the default-off setting `irori.spike.enableGrid`, so nothing
  * changes for a user who does not opt in.
  */
 import { randomBytes } from 'crypto';
@@ -10,7 +10,7 @@ import { readFileSync } from 'fs';
 import * as vscode from 'vscode';
 import { GridModel } from './gridModel';
 
-export const SPIKE_VIEW_ID = 'layeredkb.spike.grid';
+export const SPIKE_VIEW_ID = 'irori.spike.grid';
 
 /** Rendering strategy under test. */
 export type RenderMode = 'naive' | 'virtual';
@@ -71,7 +71,7 @@ export class SpikeGridViewProvider implements vscode.WebviewViewProvider {
 		host.webview.options = { enableScripts: true, localResourceRoots: [this.mediaUri] };
 		host.webview.html = this.render(host.webview);
 		host.webview.onDidReceiveMessage((message) => this.onMessage(message));
-		console.log('[LayeredKB spike] webview host attached');
+		console.log('[irori spike] webview host attached');
 		host.onDidDispose(() => {
 			this.view = undefined;
 			this.ready = false;
@@ -82,7 +82,7 @@ export class SpikeGridViewProvider implements vscode.WebviewViewProvider {
 
 	private onMessage(message: { type?: string; requestId?: number; payload?: unknown; error?: string }): void {
 		if (message.type === 'ready') {
-			console.log('[LayeredKB spike] webview reported ready');
+			console.log('[irori spike] webview reported ready');
 			this.ready = true;
 			this.readyWaiters.splice(0).forEach((resolve) => resolve());
 			return;
@@ -101,11 +101,11 @@ export class SpikeGridViewProvider implements vscode.WebviewViewProvider {
 			return;
 		}
 		if (message.type === 'boot' || message.type === 'boot-error') {
-			console.log(`[LayeredKB spike] ${message.type}`, JSON.stringify(message));
+			console.log(`[irori spike] ${message.type}`, JSON.stringify(message));
 			return;
 		}
 		if (message.type === 'add' || message.type === 'open') {
-			console.log(`[LayeredKB spike] ${message.type}`, message);
+			console.log(`[irori spike] ${message.type}`, message);
 		}
 	}
 
@@ -133,7 +133,7 @@ export class SpikeGridViewProvider implements vscode.WebviewViewProvider {
 	async request<T>(message: Record<string, unknown>): Promise<T> {
 		const view = this.view;
 		if (!view) {
-			throw new Error('spike webview is not resolved; run layeredkb.spike.openGrid first');
+			throw new Error('spike webview is not resolved; run irori.spike.openGrid first');
 		}
 		await this.waitForReady();
 		const requestId = this.nextRequestId++;
@@ -188,7 +188,7 @@ export class SpikeGridViewProvider implements vscode.WebviewViewProvider {
 	<meta http-equiv="Content-Security-Policy" content="${csp};">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	${styleTag}
-	<title>LayeredKB grid (spike)</title>
+	<title>irori grid (spike)</title>
 </head>
 <body>
 	<div id="grid"></div>

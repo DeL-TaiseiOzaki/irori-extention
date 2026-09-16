@@ -3,7 +3,7 @@
  *
  * The only thing `src/extension.ts` has to do is call `registerSpikeGrid`.
  * Everything the prototype contributes is gated behind the default-off setting
- * `layeredkb.spike.enableGrid`, so the shipped sidebar is unchanged unless a
+ * `irori.spike.enableGrid`, so the shipped sidebar is unchanged unless a
  * user opts in.
  */
 import * as vscode from 'vscode';
@@ -28,7 +28,7 @@ interface WorkspaceOptions {
 const DEFAULT_SYNTHETIC_FILES = 15118;
 import { DEFAULT_LAYERS } from '../layers';
 
-const ENABLE_SETTING = 'layeredkb.spike.enableGrid';
+const ENABLE_SETTING = 'irori.spike.enableGrid';
 const FOCUS_RETRIES = 20;
 const FOCUS_RETRY_DELAY_MS = 250;
 const THEME_SETTLE_MS = 1500;
@@ -85,7 +85,7 @@ export function registerSpikeGrid(context: vscode.ExtensionContext, index?: Work
 		if (!index || gridSource !== 'workspace') {
 			return;
 		}
-		void showWorkspace().catch((error) => console.log(`[LayeredKB spike] initial load failed: ${String(error)}`));
+		void showWorkspace().catch((error) => console.log(`[irori spike] initial load failed: ${String(error)}`));
 	});
 	if (index) {
 		// The same refresh signal the tree slots follow: the index fires after a
@@ -96,7 +96,7 @@ export function registerSpikeGrid(context: vscode.ExtensionContext, index?: Work
 				if (gridSource !== 'workspace' || !provider.isResolved) {
 					return;
 				}
-				void showWorkspace().catch((error) => console.log(`[LayeredKB spike] refresh failed: ${String(error)}`));
+				void showWorkspace().catch((error) => console.log(`[irori spike] refresh failed: ${String(error)}`));
 			})
 		);
 	}
@@ -104,26 +104,26 @@ export function registerSpikeGrid(context: vscode.ExtensionContext, index?: Work
 		vscode.window.registerWebviewViewProvider(SPIKE_VIEW_ID, provider, {
 			webviewOptions: { retainContextWhenHidden: true },
 		}),
-		vscode.commands.registerCommand('layeredkb.spike.openGrid', () => openGrid(provider)),
-		vscode.commands.registerCommand('layeredkb.spike.loadSynthetic', async (options?: SyntheticOptions) => {
+		vscode.commands.registerCommand('irori.spike.openGrid', () => openGrid(provider)),
+		vscode.commands.registerCommand('irori.spike.loadSynthetic', async (options?: SyntheticOptions) => {
 			await openGrid(provider);
 			gridSource = 'synthetic';
 			return provider.setModel(syntheticModel(options), 'virtual', options?.expand ?? 'default');
 		}),
-		vscode.commands.registerCommand('layeredkb.spike.loadWorkspace', async (options?: WorkspaceOptions) => {
+		vscode.commands.registerCommand('irori.spike.loadWorkspace', async (options?: WorkspaceOptions) => {
 			await openGrid(provider);
 			await index?.refresh();
 			return showWorkspace(options?.expand ?? 'default');
 		}),
-		vscode.commands.registerCommand('layeredkb.spike.probe', () => provider.request({ type: 'probe-theme' })),
+		vscode.commands.registerCommand('irori.spike.probe', () => provider.request({ type: 'probe-theme' })),
 		// Screenshot support only: fold the mounts shut and scroll them into view.
-		vscode.commands.registerCommand('layeredkb.spike.focusMounts', () => provider.request({ type: 'focus-mounts' })),
-		vscode.commands.registerCommand('layeredkb.spike.openGridPanel', async (options?: SyntheticOptions) => {
+		vscode.commands.registerCommand('irori.spike.focusMounts', () => provider.request({ type: 'focus-mounts' })),
+		vscode.commands.registerCommand('irori.spike.openGridPanel', async (options?: SyntheticOptions) => {
 			// Same renderer, hosted in the editor area, where horizontal space exists.
 			if (!panel) {
 				panel = vscode.window.createWebviewPanel(
-					'layeredkb.spike.gridPanel',
-					'LayeredKB Grid (spike)',
+					'irori.spike.gridPanel',
+					'irori Grid (spike)',
 					vscode.ViewColumn.One,
 					{
 						enableScripts: true,
@@ -147,7 +147,7 @@ export function registerSpikeGrid(context: vscode.ExtensionContext, index?: Work
 			panel.reveal(vscode.ViewColumn.One, false);
 			return result;
 		}),
-		vscode.commands.registerCommand('layeredkb.spike.probeThemes', async (themes?: string[]) => {
+		vscode.commands.registerCommand('irori.spike.probeThemes', async (themes?: string[]) => {
 			await openGrid(provider);
 			gridSource = 'synthetic';
 			const files = generateVault({ fileCount: 500, ...DEEP_SHAPE });
@@ -163,7 +163,7 @@ export function registerSpikeGrid(context: vscode.ExtensionContext, index?: Work
 			await workbench.update('colorTheme', original, vscode.ConfigurationTarget.Global);
 			return results;
 		}),
-		vscode.commands.registerCommand('layeredkb.spike.runBench', async (request?: Partial<BenchRequest>) => {
+		vscode.commands.registerCommand('irori.spike.runBench', async (request?: Partial<BenchRequest>) => {
 			await openGrid(provider);
 			gridSource = 'synthetic';
 			return runBenchmark(provider, { ...DEFAULT_BENCH_REQUEST, ...request });
@@ -178,15 +178,15 @@ async function openGrid(provider: SpikeGridViewProvider): Promise<void> {
 		// The view's `when` clause is re-evaluated asynchronously after the update.
 		await delay(FOCUS_RETRY_DELAY_MS);
 	}
-	await vscode.commands.executeCommand('workbench.view.extension.layeredkb');
+	await vscode.commands.executeCommand('workbench.view.extension.irori');
 	for (let attempt = 0; attempt < FOCUS_RETRIES; attempt++) {
 		try {
 			await vscode.commands.executeCommand(`${SPIKE_VIEW_ID}.focus`);
 		} catch (error) {
-			console.log(`[LayeredKB spike] focus attempt ${attempt} failed: ${String(error)}`);
+			console.log(`[irori spike] focus attempt ${attempt} failed: ${String(error)}`);
 		}
 		if (provider.isResolved) {
-			console.log(`[LayeredKB spike] view resolved after ${attempt + 1} attempt(s)`);
+			console.log(`[irori spike] view resolved after ${attempt + 1} attempt(s)`);
 			await provider.waitForReady();
 			return;
 		}

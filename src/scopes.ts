@@ -6,7 +6,7 @@
  * 配下を祖先が分類することはない（フレームの入れ子を潰さない）．
  *
  * 検出源は今のところ `.gitmodules` だけ．将来の宣言レジストリ
- * （`.layeredkb/mounts.yaml`）は {@link ScopeRoot} を作る経路が 1 本増えるだけで，
+ * （`.irori/mounts.yaml`）は {@link ScopeRoot} を作る経路が 1 本増えるだけで，
  * 分配（{@link attachScopes}）と分類（{@link classifyByScope}）は変わらない．
  */
 import {

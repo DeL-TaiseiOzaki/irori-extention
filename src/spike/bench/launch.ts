@@ -20,7 +20,7 @@ async function main(): Promise<void> {
 	const repoRoot = path.resolve(__dirname, '..', '..', '..');
 	// A real vault can be pointed at with LAYEREDKB_SPIKE_WORKSPACE; the default
 	// stays an empty throwaway folder so the benchmark measures only its own input.
-	const workspace = process.env.LAYEREDKB_SPIKE_WORKSPACE || fs.mkdtempSync(path.join(os.tmpdir(), 'layeredkb-spike-'));
+	const workspace = process.env.LAYEREDKB_SPIKE_WORKSPACE || fs.mkdtempSync(path.join(os.tmpdir(), 'irori-spike-'));
 	// A fresh, short profile path: the shared .vscode-test profile can carry a
 	// broken service-worker database (which silently stops webviews from
 	// loading), and a long --user-data-dir overflows the 107-char unix socket.

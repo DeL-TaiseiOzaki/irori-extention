@@ -10,7 +10,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-const EXTENSION_ID = 'del-taiseiozaki.layeredkb';
+const EXTENSION_ID = 'del-taiseiozaki.irori-extention';
 const SETTLE_MS = 1500;
 const THEME_SETTLE_MS = 2500;
 const WIDEN_TARGET_PX = 760;
@@ -36,7 +36,7 @@ export async function run(): Promise<void> {
 
 	await quiet();
 	await setTheme('Default Dark Modern');
-	await vscode.commands.executeCommand('layeredkb.spike.loadSynthetic', synthetic);
+	await vscode.commands.executeCommand('irori.spike.loadSynthetic', synthetic);
 	// The real design gives the grid its own container; here the eight shipped
 	// tree slots share it, so hide them to reproduce that geometry.
 	report['hiddenSlots'] = await hideTreeSlots();
@@ -54,7 +54,7 @@ export async function run(): Promise<void> {
 	report['grid-wide-dark'] = await shoot(outDir, 'grid-wide-dark.png');
 
 	await resetSideBar((report['widen'] as { command?: string })?.command);
-	await vscode.commands.executeCommand('layeredkb.spike.openGridPanel', synthetic);
+	await vscode.commands.executeCommand('irori.spike.openGridPanel', synthetic);
 	await delay(PANEL_SETTLE_MS);
 	await delay(PANEL_SETTLE_MS);
 	report['grid-editor-or-panel'] = await shoot(outDir, 'grid-editor-or-panel.png');
@@ -89,16 +89,16 @@ async function runReal(outDir: string): Promise<void> {
 	await setTheme('Default Dark Modern');
 	// Load first, hide second: loading rescans, and a rescan makes `applyLayers`
 	// re-assert every slot's visibility context, which would undo the hiding.
-	await vscode.commands.executeCommand('layeredkb.spike.loadWorkspace', { expand: 'all' });
+	await vscode.commands.executeCommand('irori.spike.loadWorkspace', { expand: 'all' });
 	report['hiddenSlots'] = await hideTreeSlots();
 	// The contents pane is taller than the side bar; fold the mounts shut and
 	// scroll them into view, since they are what this shot has to show.
-	report['scrolled'] = await vscode.commands.executeCommand('layeredkb.spike.focusMounts');
+	report['scrolled'] = await vscode.commands.executeCommand('irori.spike.focusMounts');
 	await delay(SETTLE_MS);
 	report['real-default-dark'] = await shoot(outDir, 'real-default-dark.png');
 
 	report['widen'] = await widenSideBar();
-	await vscode.commands.executeCommand('layeredkb.spike.focusMounts');
+	await vscode.commands.executeCommand('irori.spike.focusMounts');
 	await delay(SETTLE_MS);
 	report['real-wide-dark'] = await shoot(outDir, 'real-wide-dark.png');
 
@@ -115,7 +115,7 @@ async function shoot(outDir: string, name: string): Promise<Record<string, unkno
 		['-loglevel', 'error', '-f', 'x11grab', '-video_size', size, '-i', display, '-frames:v', '1', '-y', target],
 		{ stdio: 'inherit' }
 	);
-	const probe = (await vscode.commands.executeCommand('layeredkb.spike.probe')) as LayoutProbe;
+	const probe = (await vscode.commands.executeCommand('irori.spike.probe')) as LayoutProbe;
 	console.log(`[spike] captured ${name} bytes=${fs.statSync(target).size} sidebar=${probe?.sidebarPx}`);
 	return { file: target, bytes: fs.statSync(target).size, probe };
 }
@@ -135,7 +135,7 @@ async function quiet(): Promise<void> {
 async function hideTreeSlots(): Promise<string[]> {
 	const hidden: string[] = [];
 	for (let slot = 0; slot < 8; slot++) {
-		const command = `layeredkb.slot${slot}.removeView`;
+		const command = `irori.slot${slot}.removeView`;
 		try {
 			await vscode.commands.executeCommand(command);
 			hidden.push(command);
@@ -144,7 +144,7 @@ async function hideTreeSlots(): Promise<string[]> {
 		}
 	}
 	if (hidden.length === 0) {
-		const layered = vscode.workspace.getConfiguration('layeredkb');
+		const layered = vscode.workspace.getConfiguration('irori');
 		await layered.update('layers', [{ id: 'solo', label: 'Solo', patterns: ['zzz/**'] }], vscode.ConfigurationTarget.Global);
 		await layered.update('showOtherLayer', false, vscode.ConfigurationTarget.Global);
 		hidden.push('fallback:single-layer-config');
@@ -225,7 +225,7 @@ async function resetSideBar(widenCommand?: string): Promise<number> {
 }
 
 async function sideBarWidth(): Promise<number> {
-	const probe = (await vscode.commands.executeCommand('layeredkb.spike.probe')) as LayoutProbe;
+	const probe = (await vscode.commands.executeCommand('irori.spike.probe')) as LayoutProbe;
 	return Number(String(probe?.sidebarPx ?? '0x0').split('x')[0]) || 0;
 }
 

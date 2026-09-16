@@ -33,7 +33,7 @@ export class ExplorerDecorationProvider implements vscode.FileDecorationProvider
 		}
 		const decoration = new vscode.FileDecoration(
 			layer.badge ? layer.badge.slice(0, 2) : undefined,
-			`LayeredKB: ${layer.label}`,
+			`irori: ${layer.label}`,
 			layer.color ? new vscode.ThemeColor(layer.color) : undefined
 		);
 		decoration.propagate = false;

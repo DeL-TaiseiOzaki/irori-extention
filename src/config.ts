@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { DEFAULT_LAYERS, LayerDefinition, validateLayers } from './layers';
 
-export const CONFIG_SECTION = 'layeredkb';
+export const CONFIG_SECTION = 'irori';
 
-export interface LayeredKbConfig {
+export interface IroriConfig {
 	layers: LayerDefinition[];
 	exclude: string[];
 	showOtherLayer: boolean;
@@ -12,7 +12,7 @@ export interface LayeredKbConfig {
 }
 
 /** 設定を読み込む．不正なレイヤー定義があれば警告し，既定値へフォールバックする． */
-export function readConfig(): LayeredKbConfig {
+export function readConfig(): IroriConfig {
 	const cfg = vscode.workspace.getConfiguration(CONFIG_SECTION);
 	let layers = cfg.get<LayerDefinition[]>('layers') ?? DEFAULT_LAYERS;
 	if (!Array.isArray(layers) || layers.length === 0) {
@@ -21,7 +21,7 @@ export function readConfig(): LayeredKbConfig {
 	const problems = validateLayers(layers);
 	if (problems.length > 0) {
 		void vscode.window.showWarningMessage(
-			`LayeredKB: layeredkb.layers の設定に問題があるため既定のレイヤーを使います．${problems[0]}`
+			`irori: irori.layers の設定に問題があるため既定のレイヤーを使います．${problems[0]}`
 		);
 		layers = DEFAULT_LAYERS;
 	}

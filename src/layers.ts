@@ -1,5 +1,5 @@
 /**
- * LayeredKB の中核ロジック（VS Code API 非依存）．
+ * irori の中核ロジック（VS Code API 非依存）．
  *
  * ワークスペース内のファイルを「レイヤー」に分類し，レイヤーごとのツリーを組み立てる．
  * レイヤーは glob パターンの集合で定義され，先に定義されたレイヤーが優先される
@@ -15,7 +15,7 @@
  */
 import { minimatch } from 'minimatch';
 
-/** レイヤー定義（`layeredkb.layers` 設定の 1 要素） */
+/** レイヤー定義（`irori.layers` 設定の 1 要素） */
 export interface LayerDefinition {
 	/** 一意な ID */
 	id: string;
@@ -124,7 +124,7 @@ export type ScopeKind =
  *
  * スコープルートは「配下の分類を所有するフォルダ」で，個人ボールト自身も
  * その 1 つ（特別扱いはしない）．ここに載るのは表示と経路に必要な最小限で，
- * 将来の宣言レジストリ（`.layeredkb/mounts.yaml`）が増やすのは `kind` の
+ * 将来の宣言レジストリ（`.irori/mounts.yaml`）が増やすのは `kind` の
  * 値と付随するポリシーであって，この形ではない．
  */
 export interface FileScope {
@@ -174,7 +174,7 @@ export const WORKSPACE_SCOPE_ID = '.';
  * 交換面（ホストが外部とやり取りするための面）のディレクトリ名．
  *
  * 各スコープルート直下のこのディレクトリは「置かれている場所」で定義される面であり，
- * 中身のファイル種別で分類してはならない．将来 `.layeredkb/mounts.yaml` が
+ * 中身のファイル種別で分類してはならない．将来 `.irori/mounts.yaml` が
  * マウント点を宣言するようになっても，既定の面がこの名前である点は変わらない．
  */
 export const EXCHANGE_SURFACE_DIR = 'contents';
@@ -271,7 +271,7 @@ export function isUnderExchangeSurface(framePath: string): boolean {
  * 宣言するレイヤーが 1 つも無い設定では undefined を返し，その場合だけ交換面の除外は
  * 働かない．今の段階で「ここが交換面である」という宣言はレイヤー定義しかなく，
  * 宣言していない利用者にとって `contents/` はただのフォルダだからである
- * （`.layeredkb/mounts.yaml` が入ったらそちらが宣言源になる）．
+ * （`.irori/mounts.yaml` が入ったらそちらが宣言源になる）．
  */
 export function findExchangeLayerId(layers: LayerDefinition[]): string | undefined {
 	const claims = (layer: LayerDefinition): boolean =>

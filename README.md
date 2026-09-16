@@ -1,13 +1,13 @@
-# LayeredKB
+# irori for VS Code
 
 Personal Knowledge Base（PKB）のワークスペースを，役割ごとの **レイヤー** に分けて表示する VS Code 拡張機能です．
 
 PKB を CLI エージェント（Claude Code など）と一緒に運用すると，ワークスペースには性質の異なるファイルが混在します．
-LayeredKB は開いているフォルダはそのままに，ユーザーが設定した層分けに従ってファイルやフォルダを **層ごとの独立したパネル** に振り分けて表示します．
+irori は開いているフォルダはそのままに，ユーザーが設定した層分けに従ってファイルやフォルダを **層ごとの独立したパネル** に振り分けて表示します．
 フォルダ構成を変える必要はありません．
 
 ```
-┌ LayeredKB ───────────────┐
+┌ irori ───────────────┐
 │ ▾ スキーマ層          12  │  .claude/, CLAUDE.md, AGENTS.md ...
 │ ▾ オントロジー層       3  │  *.csv
 │ ▾ ナレッジベース層   148  │  *.md
@@ -22,14 +22,14 @@ LayeredKB は開いているフォルダはそのままに，ユーザーが設�
 | **オントロジー層** | この PKB のオントロジー | ○ | `**/*.csv`, `**/*.tsv`, `ontology/**` |
 | **ナレッジベース層** | メインの知見・情報 | ○ | `**/*.md`, `**/*.mdx` |
 | **Raw データ層** | Google Drive などの生データ置き場 | × | `roots` に指定したフォルダ配下の全ファイル（未設定なら空） |
-| **その他** | どのレイヤーにも属さないファイル | | 上記以外（`layeredkb.showOtherLayer` で非表示可） |
+| **その他** | どのレイヤーにも属さないファイル | | 上記以外（`irori.showOtherLayer` で非表示可） |
 
 ## 機能
 
-- **レイヤーごとのパネル**: アクティビティバーの LayeredKB アイコンを開くと，各レイヤーが独立したパネル（ビュー）として並びます．パネルのタイトルにファイル数を表示します．
+- **レイヤーごとのパネル**: アクティビティバーの irori アイコンを開くと，各レイヤーが独立したパネル（ビュー）として並びます．パネルのタイトルにファイル数を表示します．
   パネルはドラッグで並べ替え・エクスプローラーへの移動ができます．
 - **ワークスペース外フォルダ**: レイヤーに `roots` を指定すると，Google Drive など Git 管理外のフォルダを走査してそのパネルに表示します．
-- **標準エクスプローラーの装飾**: 各ファイルに所属レイヤーのバッジ（`S` / `O` / `K`）と色を付けます（`layeredkb.decorateExplorer` で無効化可）．
+- **標準エクスプローラーの装飾**: 各ファイルに所属レイヤーのバッジ（`S` / `O` / `K`）と色を付けます（`irori.decorateExplorer` で無効化可）．
 - **コンパクトフォルダー**: 子が 1 つしかないフォルダーは `a/b/c` のように 1 行にまとめます．
 - **自動更新**: ファイルの追加・削除・設定変更を検知して再走査します（`roots` のフォルダも監視します）．
 - **ファイル操作**: クリックで開く，右クリックで「横に開く」「エクスプローラーで表示」「OS で表示」「パスをコピー」．
@@ -37,14 +37,14 @@ LayeredKB は開いているフォルダはそのままに，ユーザーが設�
 
 ## レイヤーのカスタマイズ
 
-レイヤーは `layeredkb.layers` 設定で自由に定義できます（最大 8 個）．上から順に評価され，最初に一致したレイヤーが採用されます（first-match-wins）．
+レイヤーは `irori.layers` 設定で自由に定義できます（最大 8 個）．上から順に評価され，最初に一致したレイヤーが採用されます（first-match-wins）．
 `roots` を持つレイヤーは指定フォルダだけを走査し，ワークスペース内ファイルの分類には参加しません．
 
 `.vscode/settings.json` の例（Raw データ層に Google Drive のフォルダを割り当てる）:
 
 ```jsonc
 {
-  "layeredkb.layers": [
+  "irori.layers": [
     {
       "id": "schema",
       "label": "スキーマ層",
@@ -97,10 +97,10 @@ LayeredKB は開いているフォルダはそのままに，ユーザーが設�
 
 | 設定 | 既定値 | 説明 |
 | --- | --- | --- |
-| `layeredkb.exclude` | `node_modules`, `.git`, `dist`, `out` | 走査から除外する glob（ワークスペースでは `files.exclude` に加えて適用） |
-| `layeredkb.showOtherLayer` | `true` | 「その他」パネルを表示する |
-| `layeredkb.compactFolders` | `true` | コンパクトフォルダー表示 |
-| `layeredkb.decorateExplorer` | `true` | 標準エクスプローラーにバッジと色を付ける |
+| `irori.exclude` | `node_modules`, `.git`, `dist`, `out` | 走査から除外する glob（ワークスペースでは `files.exclude` に加えて適用） |
+| `irori.showOtherLayer` | `true` | 「その他」パネルを表示する |
+| `irori.compactFolders` | `true` | コンパクトフォルダー表示 |
+| `irori.decorateExplorer` | `true` | 標準エクスプローラーにバッジと色を付ける |
 
 ## 開発
 
@@ -135,7 +135,7 @@ src/
     └── unit/               # 単体テスト
 ```
 
-ビューは動的に追加できないため，`package.json` に 8 個のビュー枠（`layeredkb.slot0`〜`slot7`）を静的に宣言し，設定に応じてタイトルと表示/非表示を切り替えています．
+ビューは動的に追加できないため，`package.json` に 8 個のビュー枠（`irori.slot0`〜`slot7`）を静的に宣言し，設定に応じてタイトルと表示/非表示を切り替えています．
 
 ## 公開
 
@@ -186,4 +186,4 @@ npx @vscode/vsce package                 # .vsix を生成（内容確認用）
 npx @vscode/vsce publish                 # Marketplace へ公開
 ```
 
-公開後，[Marketplace](https://marketplace.visualstudio.com/items?itemName=del-taiseiozaki.layeredkb) に反映されるまで数分かかります．
+公開後，[Marketplace](https://marketplace.visualstudio.com/items?itemName=del-taiseiozaki.irori-extention) に反映されるまで数分かかります．
