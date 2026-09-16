@@ -1,9 +1,13 @@
 # PROGRESS
 
-> Auto-maintained by /checkpointing. Shows the most recent 5 checkpoints (newest first).
-> Full checkpoints live in `.claude/checkpoints/` (git-ignored).
+> Historical checkpoint summaries, newest first. Original detailed checkpoints
+> were local files under `.claude/checkpoints/` and are absent from this checkout.
+> New local checkpoints belong in `.local/agents/checkpoints/` (git-ignored).
+> Shared runtime paths in the summaries describe the recorded sessions; current
+> ownership is defined in [AGENTS.md](AGENTS.md) and the
+> [workspace contract](../AGENTS.md). Product design records now live in `docs/`.
 
-## [2026-09-09-052742](.claude/checkpoints/2026-09-09-052742.md)
+## 2026-09-09-052742
 
 # セッションサマリ — 核心機能の欠陥発見と修正、UI プロトタイプ
 
@@ -104,17 +108,17 @@ Unreleased 節で、旧記述と新記述が併存した。いずれも書き直
 7. **teamai-cli は現時点で採用しない推奨。** 反転トリガは 2 つ目のリポジトリの必要性、
    または 2 人目の開発者によるドリフト観測、加えて名前衝突検出チェックの整備。
 
-## [2026-09-08-023011](.claude/checkpoints/2026-09-08-023011.md)
+## 2026-09-08-023011
 
 # セッションサマリ — /init から多重 Drive 設計の決着まで
 
 ## 何をしたのか
 
-`/init` によるプロジェクトコンテキストの初期化から始まり、LayeredKB の層モデルに
+`/init` によるプロジェクトコンテキストの初期化から始まり、irori の層モデルに
 関する設計決着の記録、リポジトリのルール整備、そして実装ブロッカーの修正までを
 一続きで実施した。成果は 5 系統。
 
-1. **`/init` 完了** — `.claude/docs/DESIGN.md` を要件 14 件・NFR 7 件・技術選定 8 件・
+1. **`/init` 完了** — `docs/DESIGN.md` を要件 14 件・NFR 7 件・技術選定 8 件・
    Agent Roles 5 件・Key Decisions 6 件・散文 5 節で初期化し、`.claude/STATE.md` の
    Repository Identity を設定した。
 2. **ルール 2 件を実態に合わせて全面書き換え** — `.claude/rules/dev-environment.md` と
@@ -130,7 +134,7 @@ Unreleased 節で、旧記述と新記述が併存した。いずれも書き直
 
 ## どういうやり取りをユーザーと行ったのか
 
-`/init` 実行中にユーザーから大量の設計ノート（LayeredKB Obsidian 版、層の軸と生成物の
+`/init` 実行中にユーザーから大量の設計ノート（irori Obsidian 版、層の軸と生成物の
 置き場）が投入され、これが以降すべての作業の権威ある入力になった。ノートは 4 層から
 3 層（schema / Knowledge_Base / contents）への決着と、「生成物そのものは層に入らない。
 入るのは参照と来歴」という 2 つの結論を含んでいた。

@@ -24,3 +24,10 @@ CLAUDE.md
 CLAUDE.local.md
 PROGRESS.md
 .orchestra-backup-*/**
+
+# Product design and local agent evidence are not extension assets
+docs/**
+.local/agents/**
+
+# UI reference mockup for the layered explorer; only icon.png ships
+images/image2.png
