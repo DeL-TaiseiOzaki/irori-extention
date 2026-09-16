@@ -51,14 +51,14 @@ jobs:
         # あれば公開前に失敗する．
         run: ./scripts/check-vsix-contents.sh
       - name: Package
-        run: npx @vscode/vsce package --out "layeredkb-${GITHUB_REF_NAME#v}.vsix"
+        run: npx @vscode/vsce package --out "irori-${GITHUB_REF_NAME#v}.vsix"
       - name: Publish to Marketplace
-        run: npx @vscode/vsce publish --packagePath "layeredkb-${GITHUB_REF_NAME#v}.vsix"
+        run: npx @vscode/vsce publish --packagePath "irori-${GITHUB_REF_NAME#v}.vsix"
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: layeredkb-*.vsix
+          files: irori-*.vsix
           # コミット一覧の自動生成ではなく，手で書いた CHANGELOG の該当節を本文にする．
           body_path: ${{ env.RELEASE_NOTES_FILE }}

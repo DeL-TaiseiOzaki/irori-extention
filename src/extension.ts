@@ -8,7 +8,7 @@ import { WorkspaceIndex } from './workspaceIndex';
 
 /** package.json に静的に宣言してあるビュー枠の数（レイヤー数の上限） */
 export const SLOT_COUNT = 8;
-export const slotViewId = (slot: number) => `layeredkb.slot${slot}`;
+export const slotViewId = (slot: number) => `irori.slot${slot}`;
 
 interface Slot {
 	provider: LayerTreeProvider;
@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const visible: LayerDefinition[] = showOtherLayer ? [...layers, OTHER_LAYER] : layers;
 		if (visible.length > SLOT_COUNT) {
 			void vscode.window.showWarningMessage(
-				`LayeredKB: レイヤーは最大 ${SLOT_COUNT} 個まで表示できます．${visible.length - SLOT_COUNT} 個は表示されません．`
+				`irori: レイヤーは最大 ${SLOT_COUNT} 個まで表示できます．${visible.length - SLOT_COUNT} 個は表示されません．`
 			);
 		}
 		slots.forEach(({ provider, view }, i) => {
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 			provider.setLayer(layer);
 			view.title = layer?.label ?? '';
 			view.description = layer ? `${provider.fileCount}` : undefined;
-			void vscode.commands.executeCommand('setContext', `layeredkb.slot${i}.visible`, layer !== undefined);
+			void vscode.commands.executeCommand('setContext', `irori.slot${i}.visible`, layer !== undefined);
 		});
 	};
 
@@ -55,35 +55,35 @@ export function activate(context: vscode.ExtensionContext) {
 				void index.reloadConfig();
 			}
 		}),
-		vscode.commands.registerCommand('layeredkb.refresh', () => index.refresh()),
-		vscode.commands.registerCommand('layeredkb.configureLayers', () =>
-			vscode.commands.executeCommand('workbench.action.openSettings', 'layeredkb.layers')
+		vscode.commands.registerCommand('irori.refresh', () => index.refresh()),
+		vscode.commands.registerCommand('irori.configureLayers', () =>
+			vscode.commands.executeCommand('workbench.action.openSettings', 'irori.layers')
 		),
-		vscode.commands.registerCommand('layeredkb.openToSide', (element?: Element) => {
+		vscode.commands.registerCommand('irori.openToSide', (element?: Element) => {
 			const uri = resourceOf(index, element);
 			if (uri) {
 				return vscode.commands.executeCommand('vscode.open', uri, vscode.ViewColumn.Beside);
 			}
 		}),
-		vscode.commands.registerCommand('layeredkb.revealInExplorer', (element?: Element) => {
+		vscode.commands.registerCommand('irori.revealInExplorer', (element?: Element) => {
 			const uri = resourceOf(index, element);
 			if (uri) {
 				return vscode.commands.executeCommand('revealInExplorer', uri);
 			}
 		}),
-		vscode.commands.registerCommand('layeredkb.revealFileInOS', (element?: Element) => {
+		vscode.commands.registerCommand('irori.revealFileInOS', (element?: Element) => {
 			const uri = resourceOf(index, element);
 			if (uri) {
 				return vscode.commands.executeCommand('revealFileInOS', uri);
 			}
 		}),
-		vscode.commands.registerCommand('layeredkb.copyPath', async (element?: Element) => {
+		vscode.commands.registerCommand('irori.copyPath', async (element?: Element) => {
 			const uri = resourceOf(index, element);
 			if (uri) {
 				await vscode.env.clipboard.writeText(uri.fsPath);
 			}
 		}),
-		vscode.commands.registerCommand('layeredkb.copyRelativePath', async (element?: Element) => {
+		vscode.commands.registerCommand('irori.copyRelativePath', async (element?: Element) => {
 			const uri = resourceOf(index, element);
 			if (uri) {
 				await vscode.env.clipboard.writeText(vscode.workspace.asRelativePath(uri, false));
@@ -94,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
 	applyLayers();
 	void index.refresh();
 
-	// SPIKE (2026-09-08): grid sidebar prototype, gated by layeredkb.spike.enableGrid (default off).
+	// SPIKE (2026-09-08): grid sidebar prototype, gated by irori.spike.enableGrid (default off).
 	// The index is passed so the prototype can render the real workspace.
 	registerSpikeGrid(context, index);
 }

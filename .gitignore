@@ -16,3 +16,6 @@ CLAUDE.local.md
 # Python bytecode cache（フック実行で生成される）
 __pycache__/
 *.pyc
+
+# Local workspace-agent artifacts
+.local/agents/

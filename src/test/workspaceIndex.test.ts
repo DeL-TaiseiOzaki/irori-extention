@@ -16,7 +16,7 @@ suite('workspaceIndex: スコープルートとマウント点の検出', () => 
 	let folder: vscode.WorkspaceFolder;
 
 	setup(async () => {
-		vaultPath = await fs.mkdtemp(path.join(os.tmpdir(), 'layeredkb-vault-'));
+		vaultPath = await fs.mkdtemp(path.join(os.tmpdir(), 'irori-vault-'));
 		await fs.writeFile(
 			path.join(vaultPath, '.gitmodules'),
 			'[submodule "team-kb/engineering"]\n\tpath = team-kb/engineering\n\turl = ./somewhere\n'
@@ -64,7 +64,7 @@ suite('workspaceIndex: スコープルートとマウント点の検出', () => 
 	});
 
 	test('交換面も .gitmodules も無いフォルダでは何も検出しない', async () => {
-		const bare = await fs.mkdtemp(path.join(os.tmpdir(), 'layeredkb-bare-'));
+		const bare = await fs.mkdtemp(path.join(os.tmpdir(), 'irori-bare-'));
 		try {
 			const bareFolder: vscode.WorkspaceFolder = { uri: vscode.Uri.file(bare), name: 'bare', index: 0 };
 			assert.deepStrictEqual(await detectMounts([bareFolder]), []);

@@ -353,7 +353,7 @@ function mountAsFile(mount: MountPoint): ClassifiedFile {
 }
 
 function mountKey(mount: MountPoint): string {
-	return `layeredkb-mount:${mount.rootLabel ?? ''}/${mount.path}`;
+	return `irori-mount:${mount.rootLabel ?? ''}/${mount.path}`;
 }
 
 function regionKindOf(layerId: string): RegionKind {

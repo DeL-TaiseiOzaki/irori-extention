@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# LayeredKB verify-rclone-mount help begin
+# irori verify-rclone-mount help begin
 #
 # scripts/verify-rclone-mount.sh -- Verify the load-bearing assumptions behind the
 # multi-drive contents/ design (see .claude/docs/plans/multi-drive-contents-2026-09.md
@@ -26,7 +26,7 @@
 #      exist: (a) a mount INSIDE the workspace (e.g. contents/drive), read by VS Code's own
 #      vscode.workspace.findFiles() and governed by VS Code's search.followSymlinks setting;
 #      (b) a mount registered as a layer's external root, read by this extension's own
-#      walkDirectory() (src/walk.ts) and governed by layeredkb.followSymlinks.
+#      walkDirectory() (src/walk.ts) and governed by irori.followSymlinks.
 #
 # SAFETY
 #   - Read-only by default. The only exception is check 4, and only when --allow-write is
@@ -78,7 +78,7 @@
 #   --scan-depth N             Depth for the bounded (non --deep) check 5 scan. Default: 2
 #   --workspace-settings PATH Path to a workspace's .vscode/settings.json, read by checks 8a
 #                              and 8b for the effective search.followSymlinks /
-#                              layeredkb.followSymlinks value. Default: .vscode/settings.json
+#                              irori.followSymlinks value. Default: .vscode/settings.json
 #                              (relative to the current directory -- run this script from the
 #                              workspace root you want to test, or pass this explicitly).
 #   --only N                  Run only check N (1-7, 8, 8a, or 8b) instead of all of them.
@@ -89,7 +89,7 @@
 #   MOUNT_PATH, RCLONE_DRIVE_REMOTE, FILE_PROVIDER_PATH, ALLOW_WRITE=1, DEEP_SCAN=1,
 #   SCAN_DEPTH=N, ONLY_CHECK=N, WORKSPACE_SETTINGS=PATH
 #
-# LayeredKB verify-rclone-mount help end
+# irori verify-rclone-mount help end
 
 set -u
 set -o pipefail
@@ -147,7 +147,7 @@ mask_path_for_display() {
 }
 
 usage() {
-	sed -n '/^# LayeredKB verify-rclone-mount help begin/,/^# LayeredKB verify-rclone-mount help end/p' "$0" |
+	sed -n '/^# irori verify-rclone-mount help begin/,/^# irori verify-rclone-mount help end/p' "$0" |
 		sed '1d;$d;s/^# \{0,1\}//'
 }
 
@@ -416,7 +416,7 @@ check4_file_watch() {
 	sleep 1 # let fswatch attach before we write
 
 	write_ok=1
-	if ! printf 'layeredkb verify probe %s\n' "$(date -u +%FT%TZ)" >"$probe_file" 2>"${SCRATCH_DIR}/probe-write.err"; then
+	if ! printf 'irori verify probe %s\n' "$(date -u +%FT%TZ)" >"$probe_file" 2>"${SCRATCH_DIR}/probe-write.err"; then
 		write_ok=0
 	fi
 
@@ -636,7 +636,7 @@ check8a_workspace_mount() {
 
 # --------------------------------------------------------------------------
 # Check 8b -- a mount registered as a layer's external root, read by this extension's own
-# walkDirectory() (src/walk.ts), governed by layeredkb.followSymlinks (this extension's own
+# walkDirectory() (src/walk.ts), governed by irori.followSymlinks (this extension's own
 # setting; default false, confirmed directly from its contribution point in package.json).
 # --------------------------------------------------------------------------
 
@@ -652,7 +652,7 @@ check8b_roots_mount() {
 	fi
 	display_path="$(mask_path_for_display "$MOUNT_PATH")"
 
-	read_settings_bool "$WORKSPACE_SETTINGS" "layeredkb.followSymlinks"
+	read_settings_bool "$WORKSPACE_SETTINGS" "irori.followSymlinks"
 	case "$SETTINGS_LOOKUP_STATUS" in
 	true | false)
 		setting_value="$SETTINGS_LOOKUP_STATUS"
@@ -666,12 +666,12 @@ check8b_roots_mount() {
 
 	if [ -L "$MOUNT_PATH" ]; then
 		if [ "$setting_value" = "true" ]; then
-			pass "$title" "'${display_path}' is a symlink; layeredkb.followSymlinks is effectively true (${setting_source}). As of this writing, walkDirectory() follows a symlinked directory when this is on (with cycle/depth/entry-count limits) -- search src/walk.ts and src/workspaceIndex.ts for 'followSymlinks' to confirm the current behaviour before trusting this line."
+			pass "$title" "'${display_path}' is a symlink; irori.followSymlinks is effectively true (${setting_source}). As of this writing, walkDirectory() follows a symlinked directory when this is on (with cycle/depth/entry-count limits) -- search src/walk.ts and src/workspaceIndex.ts for 'followSymlinks' to confirm the current behaviour before trusting this line."
 		else
-			fail "$title" "'${display_path}' is a symlink; layeredkb.followSymlinks is effectively false (${setting_source}). As of this writing, walkDirectory() skips a symlinked directory entirely when this is off, and the extension surfaces a one-time warning naming how many were skipped -- search src/walk.ts and src/workspaceIndex.ts for 'followSymlinks' to confirm the current behaviour. Set layeredkb.followSymlinks to true in ${WORKSPACE_SETTINGS} to make this mount visible as a layer root."
+			fail "$title" "'${display_path}' is a symlink; irori.followSymlinks is effectively false (${setting_source}). As of this writing, walkDirectory() skips a symlinked directory entirely when this is off, and the extension surfaces a one-time warning naming how many were skipped -- search src/walk.ts and src/workspaceIndex.ts for 'followSymlinks' to confirm the current behaviour. Set irori.followSymlinks to true in ${WORKSPACE_SETTINGS} to make this mount visible as a layer root."
 		fi
 	elif [ -d "$MOUNT_PATH" ]; then
-		pass "$title" "'${display_path}' is a real directory entry, not a symlink, so walkDirectory() traverses it regardless of layeredkb.followSymlinks -- this is what an rclone FUSE mount point looks like, as opposed to a plain 'ln -s' link."
+		pass "$title" "'${display_path}' is a real directory entry, not a symlink, so walkDirectory() traverses it regardless of irori.followSymlinks -- this is what an rclone FUSE mount point looks like, as opposed to a plain 'ln -s' link."
 	else
 		fail "$title" "'${display_path}' exists but is neither a directory nor a symlink -- investigate what it actually is before relying on it."
 	fi

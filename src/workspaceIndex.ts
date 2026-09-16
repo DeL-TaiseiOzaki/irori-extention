@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { CONFIG_SECTION, LayeredKbConfig, readConfig } from './config';
+import { CONFIG_SECTION, IroriConfig, readConfig } from './config';
 import {
 	ClassificationResult,
 	ClassifiedFile,
@@ -25,7 +25,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 	private readonly _onDidChange = new vscode.EventEmitter<void>();
 	readonly onDidChange = this._onDidChange.event;
 
-	private _config: LayeredKbConfig = readConfig();
+	private _config: IroriConfig = readConfig();
 	private _result: ClassificationResult = { byLayer: new Map(), layerOfFile: new Map() };
 	private _scopes: ScopeRoot[] = [];
 	private _mounts: MountPoint[] = [];
@@ -48,7 +48,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 		);
 	}
 
-	get config(): LayeredKbConfig {
+	get config(): IroriConfig {
 		return this._config;
 	}
 
@@ -104,7 +104,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 		}
 		this._pending = this.scan()
 			.catch((err) => {
-				console.error('[LayeredKB] scan failed', err);
+				console.error('[irori] scan failed', err);
 			})
 			.finally(() => {
 				this._pending = undefined;
@@ -135,7 +135,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 			if (!hasUsableExternalRoots(layer)) {
 				this.warnOnce(
 					`unconfigured:${layer.id}`,
-					`LayeredKB: レイヤー「${layer.label}」は外部フォルダ専用ですが roots が空です．layeredkb.layers で走査するフォルダを設定してください．`
+					`irori: レイヤー「${layer.label}」は外部フォルダ専用ですが roots が空です．irori.layers で走査するフォルダを設定してください．`
 				);
 				continue;
 			}
@@ -143,7 +143,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 			if (roots.length === 0) {
 				this.warnOnce(
 					`unresolved:${layer.id}`,
-					`LayeredKB: レイヤー「${layer.label}」の roots を解決できませんでした．相対パスはフォルダーを開いてから解決されます．`
+					`irori: レイヤー「${layer.label}」の roots を解決できませんでした．相対パスはフォルダーを開いてから解決されます．`
 				);
 				continue;
 			}
@@ -208,7 +208,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 				});
 				this.reportWalk(layer, root, diagnostics, followSymlinks);
 			} catch (err) {
-				console.warn(`[LayeredKB] レイヤー "${layer.id}" の roots を読めません: ${root.fsPath}`, err);
+				console.warn(`[irori] レイヤー "${layer.id}" の roots を読めません: ${root.fsPath}`, err);
 			}
 		}
 		return files;
@@ -226,7 +226,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 			if (mount.state === 'unavailable') {
 				this.warnOnce(
 					`mount-unavailable:${where}`,
-					`LayeredKB: ${where} はこの端末にマウントされていません（参照先が見つかりません）．` +
+					`irori: ${where} はこの端末にマウントされていません（参照先が見つかりません）．` +
 						`中身は表示されません．`
 				);
 				continue;
@@ -234,7 +234,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 			if (mount.state === 'local-data') {
 				this.warnOnce(
 					`mount-local-data:${where}`,
-					`LayeredKB: ${where} はマウントではなく，この端末のローカルディレクトリとして見えています` +
+					`irori: ${where} はマウントではなく，この端末のローカルディレクトリとして見えています` +
 						`（交換面と同じディスク上の実体で，マウント境界がありません）．` +
 						`マウントに失敗したまま実体が作られた可能性があります．` +
 						`${EXCHANGE_SURFACE_DIR}/ はバージョン管理の対象外なので，この中のデータは` +
@@ -255,20 +255,20 @@ export class WorkspaceIndex implements vscode.Disposable {
 		if (!followSymlinks && diagnostics.skippedSymlinks > 0) {
 			this.warnOnce(
 				`symlink:${layer.id}:${root.toString()}`,
-				`LayeredKB: ${where} でシンボリックリンク ${diagnostics.skippedSymlinks} 件をスキップしました．` +
-					`Google Drive などのマウントを取り込むには layeredkb.followSymlinks を有効にしてください．`
+				`irori: ${where} でシンボリックリンク ${diagnostics.skippedSymlinks} 件をスキップしました．` +
+					`Google Drive などのマウントを取り込むには irori.followSymlinks を有効にしてください．`
 			);
 		}
 		if (diagnostics.truncatedBy !== undefined) {
 			this.warnOnce(
 				`truncated:${layer.id}:${root.toString()}`,
-				`LayeredKB: ${where} の走査を上限（${diagnostics.truncatedBy}）で打ち切りました．` +
+				`irori: ${where} の走査を上限（${diagnostics.truncatedBy}）で打ち切りました．` +
 					`一部のファイルは表示されません: ${diagnostics.truncatedAt}`
 			);
 		}
 		if (diagnostics.cycles > 0 || diagnostics.unresolvedSymlinks > 0) {
 			console.warn(
-				`[LayeredKB] ${where}: 循環 ${diagnostics.cycles} 件，解決できないリンク ${diagnostics.unresolvedSymlinks} 件をスキップしました．`
+				`[irori] ${where}: 循環 ${diagnostics.cycles} 件，解決できないリンク ${diagnostics.unresolvedSymlinks} 件をスキップしました．`
 			);
 		}
 	}
@@ -279,7 +279,7 @@ export class WorkspaceIndex implements vscode.Disposable {
 			return;
 		}
 		this._warned.add(key);
-		console.warn(`[LayeredKB] ${message}`);
+		console.warn(`[irori] ${message}`);
 		void vscode.window.showWarningMessage(message);
 	}
 
@@ -421,14 +421,14 @@ export function resolveRoots(roots: string[]): vscode.Uri[] {
 	return resolved;
 }
 
-/** `layeredkb.followSymlinks` の既定値．従来どおりリンクをスキップする． */
+/** `irori.followSymlinks` の既定値．従来どおりリンクをスキップする． */
 export const DEFAULT_FOLLOW_SYMLINKS = false;
 
 /**
- * `layeredkb.followSymlinks` を読む．
+ * `irori.followSymlinks` を読む．
  *
- * 本来は `LayeredKbConfig` に載せるべき設定だが，今回の修正では `config.ts` を
- * 変更しない方針のためここで直接読む（`affectsConfig` は `layeredkb.*` 全体を
+ * 本来は `IroriConfig` に載せるべき設定だが，今回の修正では `config.ts` を
+ * 変更しない方針のためここで直接読む（`affectsConfig` は `irori.*` 全体を
  * 見ているので，変更時の再走査は従来どおり働く）．
  */
 function readFollowSymlinks(): boolean {
