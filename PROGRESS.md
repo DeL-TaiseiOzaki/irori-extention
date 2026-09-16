@@ -7,6 +7,83 @@
 > ownership is defined in [AGENTS.md](AGENTS.md) and the
 > [workspace contract](../AGENTS.md). Product design records now live in `docs/`.
 
+## 2026-09-16-125541
+
+# セッションサマリ — 拡張の irori-extention へのリネームと共有ランタイム移譲
+
+## 何をしたのか
+
+LayeredKB という独立した製品名を廃し、VS Code 拡張の識別子・リポジトリ名・表示名を
+irori 側へ統一した。あわせて、2026-09-14 の移行監査で作業ツリーに残されたままだった
+共有エージェント設定の削除をコミットした。3 リポジトリすべてマージ済み。
+
+1. **拡張本体のリネーム（PR #17, squash `b31a2e2c`）**
+   - `package.json`: name `irori-extention`／displayName `irori for VS Code`／
+     repository・homepage・bugs URL を新リポジトリへ
+   - 貢献識別子を `layeredkb.*` → `irori.*` に全面変更（アクティビティバーコンテナ、
+     ビュー枠 8、コマンド 10、設定 7、contextValue、when 句のコンテキストキー）
+   - 拡張 ID は `del-taiseiozaki.irori-extention`。統合テストと spike ベンチも追従
+   - 通知文言・コンソール接頭辞・将来のレジストリパス `.irori/mounts.yaml` も統一
+2. **共有ランタイムの移譲（同 PR 内 `45c15cc6`）** — `.claude/` `.codex/` `.agents/`
+   ルート `CLAUDE.md` を削除、Orchestra 由来の `scripts/install.sh` `update.sh` と
+   バージョンマーカーを廃止、`.claude/docs/{DESIGN.md,plans,research,libraries,reviews}`
+   を `docs/` へ移動（Git はリネームとして認識）、`docs/DEVELOPMENT.md` を新設。
+   削除 99 件を 1 件ずつ照合し、対応先が無い 12 件は意図的な廃止（履歴に残存）と確認。
+3. **UI リファレンス画像の追跡（同 PR 内 `9bd60bcc`）** — `images/image2.png` は
+   irori 側 `docs/LAYERED-EXPLORER.md` がパス参照しているのに未追跡だった。
+   `.vscodeignore` で VSIX からは除外し、参照切れを解消。
+4. **兄弟リポジトリの追従** — irori PR #28（9 ドキュメント＋ `tests/layeredkb.test.ts`
+   → `tests/irori-extention.test.ts`）、irori-templete PR #2（README・ADR 001・
+   CONTRIBUTING の 3 ファイル、base は `feat/kb-template`）。両方ともマージ済み。
+5. **ワークスペース側（Git 管理外）** — `AGENTS.md` のルーティング表、`.claude/rules/*`、
+   `.claude/skills/*`、`.claude/STATE.md`、`.claude/docs/*`、`docs/irori/*`、`_research/*`、
+   `.claude/logs/*` を一括更新。`scripts/check_agent_config.py` の `REPOSITORIES` と
+   「拡張リポジトリ内に共有ランタイムを置かない」ガードも新パスへ。
+6. **/init（セッション前半）** — `irori/CLAUDE.md` を作成（AGENTS.md への薄い
+   ポインタ＋実コマンド）。`irori-templete/CLAUDE.md` も作成したが、その後別セッションが
+   独自版に置き換えた。拡張リポジトリには `check_agent_config.py` が `CLAUDE.md` の
+   存在を禁止しているため作成していない。
+
+## 決定事項
+
+- 製品名は「irori for VS Code」、リポジトリ／ディレクトリ名は `irori-extention`、
+  設定・コマンド接頭辞は `irori.*`。所有者が選択。
+- 既存利用者の `layeredkb.*` 設定は引き継がない。互換シムは実装せず、CHANGELOG の
+  Unreleased に破壊的変更として記載。
+- 過去記録（`_research/`、`.claude/logs/`、過去チェックポイント、既リリース分の
+  CHANGELOG）も所有者の指示により一括置換した。当時の記録上の名称は現行名になっている。
+
+## 検証
+
+| 対象 | 結果 |
+| --- | --- |
+| `npm run compile` | 通過（型検査・lint・バンドル） |
+| `npm run test:unit` | 102 passing（マージ後の main で再実行も 102 passing） |
+| `xvfb-run -a npm test` | 6 passing / exit 0。新識別子でのアクティベーションとコマンド登録を確認 |
+| `bash scripts/check-vsix-contents.sh` | PASS（6 ファイル、allow-list と完全一致） |
+| irori `npm test` | 143 tests / 139 pass / 0 fail / 4 skipped（provider 系任意） |
+| `bash scripts/check.sh`（KB_design） | ok: true, errors 0 |
+| CI | irori-extention build ✓／irori verify ＋ package 3 プラットフォーム ✓ |
+
+irori と irori-templete は別セッションが同じチェックアウトを保持していたため、
+専用 worktree で編集・検証し、共有チェックアウトには触れていない（作業後に削除済み）。
+
+## 未解決・次のアクション
+
+1. **Marketplace の旧エントリ `del-taiseiozaki.layeredkb`（v0.2.0, 2 installs）が未削除。**
+   所有者は削除の意思を表明済み。`vsce unpublish del-taiseiozaki.layeredkb` は
+   Azure DevOps の PAT（Marketplace: Manage）が必要で、この環境には無い。
+   取り消し不可で ID は再利用できない点に注意。
+2. **新 ID `del-taiseiozaki.irori-extention` での初回公開は未実施。** 公開時に
+   バージョン番号をどう扱うか（0.2.1 か 0.3.0 か）は未決定。CHANGELOG の Unreleased
+   節を確定させる必要がある。
+3. **`docs/DESIGN.md` の Key Decisions にリネームの行が無い。** 破壊的な識別子変更は
+   設計記録に残す価値がある（未着手）。
+4. **irori-templete のローカルチェックアウトが `feat/kb-template` で behind 1。**
+   別セッションが作業中のため pull していない。PR #1 は引き続き open。
+5. irori の `feat/agent-skills`（PR #27）には今回の main マージが未反映。統合は
+   その作業側の担当。
+
 ## 2026-09-09-052742
 
 # セッションサマリ — 核心機能の欠陥発見と修正、UI プロトタイプ
