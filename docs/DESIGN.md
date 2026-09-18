@@ -7,12 +7,18 @@
 > [Workspace contract](../../AGENTS.md) · [Shared rules](../../.claude/rules/) ·
 > [Claude runtime adapter](../../CLAUDE.md) · [Progress](../PROGRESS.md)
 >
+> **Development ended (2026-09-18):** irori, the desktop application, is the
+> single implementation of the layer model. Nothing further is planned here and
+> nothing is published under `del-taiseiozaki.irori-extention`; see the last row
+> of Key Decisions. This document is kept as the record of how the model was
+> worked out — the requirements, the measurements against a real vault and the
+> decisions below stand, and irori carries the behaviour forward.
+>
 > **Workspace direction (2026-09-14):** irori is the desktop application;
-> `irori-extention` provides its capabilities in VS Code; `irori-templete` is the
-> recommended main-KB repository template under development. This document
-> retains the extension's design decisions and implementation history. Older
-> Obsidian-host proposals are historical options, not a current delivery
-> commitment or evidence that all irori features are implemented here.
+> `irori-extention` provided its capabilities in VS Code; `irori-templete` is the
+> recommended main-KB repository template under development. Older Obsidian-host
+> proposals are historical options, not a current delivery commitment or evidence
+> that all irori features are implemented here.
 
 ## 背景・目的 (Background & Purpose)
 
@@ -165,10 +171,15 @@ The purpose is therefore twofold. Keep the published VS Code extension working, 
 | An ordinary local directory found directly under `contents/` is an anomaly to surface, not a case to support. | It is the observable signature of a mount that failed to attach and was silently replaced by a real directory - the shape in which an rclone or Drive client failure quietly turns into locally stored bytes that git then ignores. Because the layer excludes `contents/` from version control, such a directory is data that exists on exactly one machine and is backed up nowhere. Reporting it is cheap and the failure it indicates is expensive. | Treating it as ordinary content, which is what hides the failure. Refusing to index it, which loses the evidence that something is there. | 2026-09-09 |
 | Each mount points at one specific folder, not at a whole drive. `combine` is not used: the personal mount is a named folder inside My Drive, and each team mount is a named folder inside a shared drive, so three independent rclone mounts land at three entries under `contents/`. | The exchange surface is a set of deliberately chosen folders, not a mirror of every drive the account can reach. `combine` was attractive while the problem was believed to be `N drives, one mount`; scoping each mount to a folder makes it unnecessary and strictly narrower, which is the safer default for a surface that is excluded from version control. It also supersedes the previously recorded reason for preferring rclone: the deciding factor is no longer that `combine` can expose several drives as siblings, but that rclone mounts onto a non-existent subdirectory of an existing real `contents/`, creating no link and so never meeting the Windows junction limitation. | A `combine` remote exposing every drive, which grants the surface far more than was asked for. One mount per whole drive with the wanted folder nested inside, which puts unrelated material under the exchange surface and makes the layer's meaning depend on where the user happens to navigate. | 2026-09-09 |
 | Drop LayeredKB as an independent product name. The extension is `irori for VS Code`, its repository and directory are `irori-extention`, its Marketplace id is `del-taiseiozaki.irori-extention`, and every contributed identifier carries the `irori.*` prefix. No compatibility layer reads the old `layeredkb.*` values. | The extension exists to bring irori's knowledge-workspace capabilities into VS Code, so two names presented one product as two and made the shared schema / Knowledge_Base / contents model read as two competing models. The identifier prefix had to move with the name, because VS Code resolves settings, commands, view slots and `when` context keys by the contributed id: a half rename leaves a user's configuration under a name the product no longer carries. The shim was rejected on cost rather than on principle - it would keep both prefixes alive in `contributes`, in every `when` clause and in each context key for as long as the old name is remembered, and the published entry it would have served had two installs. VS Code does not carry values across a settings id, so the break is recorded in the CHANGELOG as a breaking change and existing users rewrite their keys. | Keep LayeredKB as the product name and treat the extension as a sibling product, which leaves the shared model attributed to two products. Rename the display name and the repository while leaving `layeredkb.*` identifiers in place, which keeps existing settings working and ships a prefix that contradicts the name it appears under. Ship a compatibility layer that reads `layeredkb.*` and writes `irori.*`. | 2026-09-16 |
+| Stop developing irori for VS Code. The desktop application is the single implementation of the layer model; this repository is kept readable as the record, nothing is published under `del-taiseiozaki.irori-extention`, and the old Marketplace entry `del-taiseiozaki.layeredkb` is unpublished. | The two had converged on the same subject. The single-axis layer model, scope-aware classification and the hidden-entry rule are all implemented in irori, which also carries the editor, the CLI agents, the Drive mounts and a two-platform release pipeline that this host has no route to; irori's own `tests/irori-extention.test.ts` is an adaptation of this repository's `scopes.test.ts`, so the behaviour had already moved. The effort followed the subject: in the thirty days to 2026-09-18 irori took 134 commits to this repository's 16, and those 16 were the rename and its records rather than features. What only this host offers — the layer view inside the editor where the reader's CLI agents already run — did not justify a second implementation of the model for two installs. | Keep the extension as one narrow capability, the layer explorer in VS Code, and drop parity as a direction; rejected because the model is the expensive part and the model is what would be duplicated. Continue toward parity, which the commit ratio shows was not happening. The Obsidian community plugin named as the next host, of which no line exists, closes with this. | 2026-09-18 |
 
 ## TODO / Open Questions
 
 <!-- Open design questions and deferred decisions for this project. -->
+
+These were open when development ended on 2026-09-18. They are kept as a record
+of what the model had not settled, not as planned work. Anything still worth
+answering is answered in irori.
 
 Resolved on 2026-09-08, see Key Decisions: the manifest join key; the classification
 signal for declared mounts and scope roots; where a git submodule sits relative to the

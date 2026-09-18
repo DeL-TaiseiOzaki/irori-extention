@@ -1,5 +1,13 @@
 # irori for VS Code
 
+> **開発終了（2026-09-18）.** この拡張の開発は終了しました．層モデルとその分類は
+> デスクトップアプリ [irori](https://github.com/DeL-TaiseiOzaki/irori) が実装しており，
+> 今後の開発はそちらに一本化します．新しい拡張 ID
+> `del-taiseiozaki.irori-extention` では公開しません．旧 Marketplace エントリ
+> `del-taiseiozaki.layeredkb`（v0.2.0）は取り下げます．
+> このリポジトリは記録として残し，読める状態を保ちます．経緯は
+> [docs/DESIGN.md](docs/DESIGN.md) の Key Decisions を参照してください．
+
 Personal Knowledge Base（PKB）のワークスペースを，役割ごとの **レイヤー** に分けて表示する VS Code 拡張機能です．
 
 PKB を CLI エージェント（Claude Code など）と一緒に運用すると，ワークスペースには性質の異なるファイルが混在します．

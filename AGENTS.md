@@ -1,9 +1,16 @@
 # irori for VS Code contributor contract
 
-irori for VS Code provides the desktop application's capabilities as a VS Code
-extension. This is an independent TypeScript repository with its own version,
-tests and releases; feature parity with the desktop app is a direction, not a
-claim about shipped behavior.
+**Development ended on 2026-09-18.** The desktop application irori is the single
+implementation of the layer model, and this repository is kept readable as the
+record of how that model was worked out. Nothing further is planned, and nothing
+is published under `del-taiseiozaki.irori-extention`. See the Key Decisions
+entry in [docs/DESIGN.md](docs/DESIGN.md) for why. Ordinary contribution
+guidance below still applies to a correction or a record kept here; a new
+feature belongs in irori.
+
+irori for VS Code provided the desktop application's capabilities as a VS Code
+extension. It is an independent TypeScript repository with its own version,
+tests and releases.
 
 When this checkout is inside `KB_design`, the [workspace contract](../AGENTS.md)
 governs shared work. Shared skills, rules and runtime configuration live in
