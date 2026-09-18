@@ -1,6 +1,10 @@
 # Change Log
 
-## Unreleased
+## Unreleased（公開されません）
+
+> 2026-09-18 に開発終了．以下の変更はリポジトリには入っているが，Marketplace へは
+> 公開しない．層モデルはデスクトップアプリ irori が実装する．経緯は
+> [docs/DESIGN.md](docs/DESIGN.md) の Key Decisions を参照．
 
 ### 破壊的変更
 
