@@ -264,3 +264,88 @@ the comparison in §5 changes once there is a real second consumer to weigh agai
   (GitHub, GitLab, GitCode, CNB, plain git, TGit) and which is Tencent-hosted.
 - This repository: `CLAUDE.md` ("Native Runtime Boundary", "Skill Catalog"), `scripts/check.sh`
   (read in full for §3.3), `git log` / `git status --porcelain` (single-author evidence, §2).
+
+---
+
+## 8. Reassessment, 2026-09-21
+
+The owner asked whether teamai-cli's usefulness for irori had changed. It has
+not, but the reasons are no longer the ones §7 gave, and two of them have been
+answered by other means.
+
+### The reversal triggers
+
+§7 named two: a second repository, and drift observed with a second developer.
+
+**The first fired on paper and was answered by a different solution.** There are
+now three repositories plus a template. But on 2026-09-14 shared agent
+configuration moved out of every repository and into the `KB_design` workspace
+root, where `.agents/skills` is a symlink to the canonical `.claude/skills` and
+`scripts/check_agent_config.py` enforces that. One copy exists, not three.
+Adopting teamai would replace that single copy with a distribution to
+`.claude/skills`, `.codex/skills`, `.opencode/skills` and so on in each
+repository — precisely the duplication `irori-templete`'s ADR 001 D9 rejected,
+and precisely what the 2026-09-14 migration removed.
+
+**The second has not fired.** All three repositories still carry commits from
+one author.
+
+**The stated precondition is still unmet.** §7 required a check for name
+collisions between `~/.claude/skills/` and `<repo>/.claude/skills/` before
+adoption. teamai-cli still does not provide one: its guide states that
+same-named user and project resources both remain in place and "the AI tool
+decides runtime precedence". The nearest facilities are `teamai skill show` and
+`teamai list skills --source all`.
+
+### What changed in the tool
+
+teamai-cli is materially more mature than at the 2026-09-08 evaluation: v0.24.0
+stable and v0.25.0-beta.3, around 100 commits in the ten days to 2026-09-20,
+4,840 stars, 55 contributors (though the top five still hold 87% of commits),
+and CI running typecheck plus coverage across an OS/Node matrix. `--scope
+project` is now the default, which substantially weakens the R7 risk this
+document rated Critical — writes no longer land in `~/.claude/skills/` by
+default. The LICENSE is MIT despite GitHub reporting `NOASSERTION`, which is an
+artefact of Tencent's preamble.
+
+### The decision
+
+**Unchanged: do not adopt, for this workspace or for `irori-templete`.** The
+duplication argument now decides it on its own, independently of the risks §4
+listed. For irori as a product the answer is firmer still: teamai's project
+scope writes CLI configuration directories into the repository it targets, which
+is exactly what `irori/docs/SKILLS.md` guarantees irori never does and what
+`tests/harnesses.test.ts` and `scripts/real-agents.ts` assert by comparing the
+schema layer's hashes before and after a turn. Its defaults — self-updating
+through a Stop hook, committing session statistics to the team repository —
+also do not suit a note application whose users are not necessarily engineers.
+Pi, one of irori's four harnesses, is unsupported: teamai's `omp` target is
+Oh My Pi, a different package from the `@earendil-works/pi-coding-agent` irori
+launches.
+
+### Ideas worth taking without the tool
+
+1. **A `teamai doctor`-style check that declared resources actually reached each
+   harness.** irori's skill picker already names a package it cannot read; the
+   step beyond is verifying that what a KB declares is what each CLI would
+   resolve.
+2. **Tombstones for deletion.** A removed skill currently just stops being
+   listed; a record of the removal propagates the intent.
+3. **Role and project namespaces for distribution scope.** `irori/docs/SKILLS.md`
+   records a flat list as a known limitation; roles × projects is a shape worth
+   borrowing if that limitation starts to bite.
+
+### Two findings this reassessment surfaced
+
+- **`.agents/skills/` is the convergent location, and now for a better reason
+  than this document originally had.** Pi's own documentation lists
+  `~/.agents/skills/` and `.agents/skills/` among its native search paths under
+  the Agent Skills convention, and teamai itself recognises `.agents/skills` as
+  "Central (Agent Skills)". `irori/docs/SKILLS.md` had justified the choice
+  partly by claiming claudian used the directory; it does not, and that
+  correction is being made in irori separately.
+- **The `KB_design` workspace root is not under version control.** `AGENTS.md`,
+  `.claude/`, `.codex/` and `scripts/` belong to no Git repository, so the
+  shared configuration that the 2026-09-14 migration consolidated has no
+  history, no review and no backup. That is a real gap, but it is answered by
+  `git init` or a small private repository — not by a distribution tool.
