@@ -12,7 +12,7 @@ irori for VS Code provided the desktop application's capabilities as a VS Code
 extension. It is an independent TypeScript repository with its own version,
 tests and releases.
 
-When this checkout is inside `KB_design`, the [workspace contract](../AGENTS.md)
+When this checkout is inside `dev-irori`, the [workspace contract](../AGENTS.md)
 governs shared work. Shared skills, rules and runtime configuration live in
 `../.claude/`, `../.codex/` and `../.agents/`. Keep product source and design
 records here; do not recreate that shared runtime in this repository.
